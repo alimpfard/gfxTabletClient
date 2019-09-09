@@ -73,11 +73,18 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
+    <Compile Include="CapabilityViewWindow.xaml.cs">
+      <DependentUpon>CapabilityViewWindow.xaml</DependentUpon>
+    </Compile>
     <Compile Include="gfxPacket.cs" />
     <Compile Include="IDeviceUpdater.cs" />
     <Compile Include="IniFile.cs" />
     <Compile Include="StylusHandler.cs" />
     <Compile Include="UdpSenderDeviceUpdater.cs" />
+    <Page Include="CapabilityViewWindow.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="MainWindow.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>

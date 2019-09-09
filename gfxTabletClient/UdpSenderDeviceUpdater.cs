@@ -124,6 +124,17 @@ namespace gfxTabletClient
             Enqueue(npacket);
         }
 
+        public void EmitRawClick(byte button, bool up)
+        {
+            gfxPacket npacket = packetFromPool();
+
+            npacket.eventType = (byte)SwapBytes(1); // button
+            npacket.button = button;
+            npacket.down = (byte)SwapBytes((ushort)(up ? 0 : 1));
+
+            Enqueue(npacket);
+        }
+
         private void update()
         {
             while (running)

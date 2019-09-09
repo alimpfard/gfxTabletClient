@@ -10,8 +10,16 @@
         <Grid.RowDefinitions>
             <RowDefinition Height="*"></RowDefinition>
         </Grid.RowDefinitions>
-        <Canvas x:Name="mCanvas" HorizontalAlignment="Left" Height="{Binding ActualHeight, ElementName=container}" Margin="0,0,0,0" VerticalAlignment="Top" Width="{Binding ActualWidth, ElementName=container}" StylusMove="MCanvas_StylusMove" StylusDown="MCanvas_StylusDown" StylusUp="MCanvas_StylusUp" StylusInAirMove="MCanvas_StylusMove">
+        <Menu Height="10" VerticalAlignment="Top">
+            <MenuItem Header="_Settings">
+                <MenuItem Header="_Preferences" Click="MenuItem_Click"/>
+                <MenuItem Header="_Capabilities" Click="MenuItem_Click_1"/>
+            </MenuItem>
+        </Menu>
+        <Canvas x:Name="mCanvas" HorizontalAlignment="Left" Height="{Binding ActualHeight, ElementName=container}" Margin="32,0,0,0" VerticalAlignment="Top" Width="{Binding ActualWidth, ElementName=container}" StylusMove="MCanvas_StylusMove" StylusDown="MCanvas_StylusDown" StylusUp="MCanvas_StylusUp" StylusInAirMove="MCanvas_StylusMove">
             <TextBox x:Name="textbox" Height="{Binding ActualHeight, ElementName=mCanvas}" TextWrapping="Wrap" Text="TextBox" Width="{Binding ActualWidth, ElementName=mCanvas}" SizeChanged="Textbox_SizeChanged" IsReadOnly="True" IsUndoEnabled="False" />
         </Canvas>
+        <ListBox x:Name="mButtonsListLeft" Height="{Binding ActualHeight, ElementName=container}" VerticalAlignment="Center" HorizontalAlignment="Left" Width="32"/>
+        <ListBox x:Name="mButtonsListRight" Height="{Binding ActualHeight, ElementName=container}" VerticalAlignment="Center" HorizontalAlignment="Right" Width="32"/>
     </Grid>
 </Window>
