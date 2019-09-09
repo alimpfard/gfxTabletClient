@@ -79,7 +79,7 @@ namespace gfxTabletClient
                 if (State.clicked)
                 {
                     // it was clicked previously, emit an up event
-                    EmitClick(packet, 0, true);
+                    EmitClick(packet, -1, true);
                     State.clicked = false;
                 }
             }
@@ -88,7 +88,7 @@ namespace gfxTabletClient
                 if (!State.clicked)
                 {
                     // it was not clicked before, emit a down event
-                    EmitClick(packet, 0, false);
+                    EmitClick(packet, -1, false);
                     State.clicked = true;
                 }
             }
@@ -110,7 +110,7 @@ namespace gfxTabletClient
             packetQueue.Enqueue(packet);
         }
 
-        private void EmitClick(gfxPacket packet, byte button, bool up)
+        private void EmitClick(gfxPacket packet, short button, bool up)
         {
             gfxPacket npacket = packetFromPool();
 
@@ -119,12 +119,12 @@ namespace gfxTabletClient
             npacket.pressure = packet.pressure;
             npacket.eventType = (byte)SwapBytes(1); // button
             npacket.button = button;
-            npacket.down = (byte)SwapBytes((ushort)(up ? 0 : 1));
+            npacket.down = (byte) SwapBytes((ushort)(up ? 0 : 1));
 
             Enqueue(npacket);
         }
 
-        public void EmitRawClick(byte button, bool up)
+        public void EmitRawClick(short button, bool up)
         {
             gfxPacket npacket = packetFromPool();
 

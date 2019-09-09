@@ -29,7 +29,7 @@ namespace gfxTabletClient
         public UInt16 pressure;
 
         [FieldOffset(18)]
-        public Int16 button; // -1 : stylus in range, 0 : tap/click/button 0, 1 : extra button 1, 2 : extra button 2, 
+        public Int16 button; // -1 : stylus in range, -2 : tap/click/button 0, -3 : extra button 1, -4 : extra button 2, 
 
         [FieldOffset(20)]
         public byte down;  // 1 = down, 0 = up
