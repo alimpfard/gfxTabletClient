@@ -40,7 +40,7 @@ namespace gfxTabletClient
                 packetPool.AddLast(new gfxPacket()
                 {
                     signature = Encoding.ASCII.GetBytes("GfxTablet"),
-                    vnum = SwapBytes(2)
+                    vnum = SwapBytes(3)
                 });
             InitSocket();
             thread = new Thread(this.update);
