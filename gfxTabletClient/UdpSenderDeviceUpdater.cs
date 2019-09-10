@@ -21,13 +21,14 @@ namespace gfxTabletClient
         int barrelbutton = -3; // button 2
         private static readonly IniFile iniFile = new IniFile();
 
-        private const int PoolCapacity = 4;
+        private const int PoolCapacity = 8;
 
         struct state
         {
             public bool clicked;
             public bool barrel;
             public int x, y;
+            public bool hovering;
         }
 
         private state State = new state();
@@ -105,7 +106,6 @@ namespace gfxTabletClient
                     State.clicked = true;
                 }
             }
-
             Enqueue(packet);
         }
         private gfxPacket packetFromPool()
@@ -130,22 +130,34 @@ namespace gfxTabletClient
             npacket.x = packet.x;
             npacket.y = packet.y;
             npacket.pressure = packet.pressure;
-            npacket.eventType = (byte)SwapBytes(1); // button
+            npacket.eventType = (byte) (SwapBytes(1) >> 8); // button
             npacket.button = button;
-            npacket.down = (byte) SwapBytes((ushort)(up ? 0 : 1));
+            npacket.down = (byte) (SwapBytes((ushort)(up ? 0 : 1))>>8);
 
             Enqueue(npacket);
         }
 
-        public void EmitRawClick(short button, bool up)
+        public void EmitRawClick(short button, bool down)
+        {
+            _EmitRawClick(button, down);
+            SignalHovering(State.hovering);
+        }
+        public void _EmitRawClick(short button, bool down)
         {
             gfxPacket npacket = packetFromPool();
 
-            npacket.eventType = (byte)SwapBytes(1); // button
-            npacket.button = button;
-            npacket.down = (byte)SwapBytes((ushort)(up ? 0 : 1));
+            npacket.eventType = (byte) (SwapBytes(1) >> 8); // button
+            npacket.button = (short) SwapBytes((ushort) button);
+            npacket.down = (byte)(SwapBytes((ushort)(down ? 1 : 0))>>8);
 
             Enqueue(npacket);
+        }
+
+
+        public void SignalHovering(bool hovering)
+        {
+            _EmitRawClick(-1, hovering);
+            State.hovering = hovering;
         }
 
         private void update()
@@ -157,7 +169,7 @@ namespace gfxTabletClient
                     gfxPacket packet = packetQueue.Dequeue();
                     socket.SendTo(RawSerialize(packet), endPoint);
                     packetPool.AddLast(packet);
-                    // Console.WriteLine($"sent {packet}");
+                    //Console.WriteLine($"sent {packet}");
                     Thread.Sleep(0);
                 }
             }

@@ -132,6 +132,16 @@ namespace gfxTabletClient
             textbox.Text = $"at {x}, {y} with pressure {pressure} {(inair ? "in air" : "touching")} - {(barrel ? "barrel" : "")} - {yaw};{pitch};{roll}"; 
         }
 
+        private void Textbox_StylusEnter(object sender, StylusEventArgs e)
+        {
+            mDeviceUpdater.SignalHovering(true);
+        }
+
+        private void Textbox_StylusOutOfRange(object sender, StylusEventArgs e)
+        {
+            mDeviceUpdater.SignalHovering(false);
+        }
+
         private void Textbox_SizeChanged(object sender, SizeChangedEventArgs e)
         {
             xmax = e.NewSize.Width;
