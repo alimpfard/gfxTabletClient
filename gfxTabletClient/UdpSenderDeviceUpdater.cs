@@ -18,6 +18,8 @@ namespace gfxTabletClient
         private readonly LinkedList<gfxPacket> packetPool;
         private bool running = true;
         private Thread thread;
+        int barrelbutton = -3; // button 2
+        private static readonly IniFile iniFile = new IniFile();
 
         private const int PoolCapacity = 4;
 
@@ -42,6 +44,17 @@ namespace gfxTabletClient
                     signature = Encoding.ASCII.GetBytes("GfxTablet"),
                     vnum = SwapBytes(3)
                 });
+            if (iniFile.KeyExists("BarrelButton", "ButtonMappings"))
+                try
+                {
+                    barrelbutton = int.Parse(iniFile.Read("BarrelButton", "ButtonMappings"));
+                }
+                catch (Exception e)
+                {
+                    iniFile.DeleteKey("BarrelButton", "ButtonMappings");
+                }
+            else
+                iniFile.Write("BarrelButton", barrelbutton.ToString(), "ButtonMappings");
             InitSocket();
             thread = new Thread(this.update);
             thread.Start();
@@ -70,7 +83,7 @@ namespace gfxTabletClient
             if (barrel ^ State.barrel)
             {
                 State.barrel = !State.barrel;
-                EmitClick(packet, 1, !State.barrel);
+                EmitClick(packet, (short) barrelbutton, !State.barrel);
             }
 
             if (inair)
